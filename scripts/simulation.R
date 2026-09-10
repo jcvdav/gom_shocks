@@ -13,7 +13,8 @@
   # SET UP #######################################################################
   
   ## Load packages ---------------------------------------------------------------
-  pacman::p_load(tidyverse)
+  pacman::p_load(tidyverse,
+                 cowplot)
   
   # PROCESSING ###################################################################
   
@@ -41,11 +42,11 @@
   
   growth(r=r, K=K, S=500)
   
-  simulate <- function(p, q, beta, c, X, r, K, shock_t=Inf, which=NULL, shock=1){
+  simulate <- function(p, q, beta, c, X, r, K, shock_t=Inf, which="", shock=1){
     p_original <- p
     q_original <- q
     r_original <- r
-
+    c_original <- c
     
     #Step 0, Build one vector of length 100 fir each state variable
     E_t <- H_t <- S_t <- X_t <-  numeric(length = 100)
@@ -54,11 +55,17 @@
     
     for(t in 1:100){
       #Identify whether this timestep has a shock
-      if(t==shock){
+      if(t==shock_t){
         if(which=="q"){q <- shock*q}
         if(which=="p"){p <- shock*p}
+        if(which=="r"){r <- shock*r}
+        if(which=="c"){c <- shock*c}
+        if(which=="X"){X_t[t] <- shock*X_t[t]}
       } else {
         q <- q_original
+        p <-p_original
+        r <- r_original
+        c <- c_original
       }
       #Step 1, identify the level of effort at time t
       E_t[t] <- E_star(p=p, q=q, X=X_t[t], beta=beta, c=c)
@@ -88,12 +95,86 @@ ggplot(data=data1,
   geom_line() + 
   lims(y=c(0,K))
 
-data2 <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
-                  which="q", shock=0.3)
+##Shock q (Drought)
+shock_q <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
+                  which="q", shock=1 + (-58.3/100))
   
-ggplot(data=data2, 
+p_X <- ggplot(data=shock_q, 
        mapping= aes(x=time, y=X_t))+
-  geom_line() 
+  geom_line()
+
+p_H <- ggplot(data=shock_q, 
+              mapping= aes(x=time, y=H_t))+
+  geom_line()
+
+plot_grid(p_X, p_H, ncol = 1)
+
+###Shock q (hypoxia) 
+shock_q <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
+                    which="q", shock=1 + (-20/100))
+
+ggplot(data=shock_q, 
+       mapping= aes(x=time, y=X_t))+
+  geom_line() + lims(y=c(0,K))
+
+## Shock p (Red Tide)
+shock_p <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
+                  which="p", shock=1 + (-25/100))
+
+ggplot(data=shock_p, 
+       mapping= aes(x=time, y=X_t))+
+  geom_line() + 
+  lims(y=c(0,K))
+
+##Shock c (Hypoxia) 
+shock_c <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
+                    which="c", shock=1 + (11.1/100))
+
+ggplot(data=shock_c, 
+       mapping= aes(x=time, y=X_t))+
+  geom_line() + 
+  lims(y=c(0,K))
+
+## Shock r (Red Tide)
+shock_r <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
+                    which="r", shock=1 + (31.5/100))
+
+ggplot(data=shock_r, 
+       mapping= aes(x=time, y=X_t))+
+  geom_line() + 
+  lims(y=c(0,K))
+
+##Shock r (Hypoxia)
+shock_r <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
+                            which="r", shock=1 + (28.6/100))
+
+ggplot(data=shock_r,
+       mapping= aes(x=time, y=X_t))+
+  geom_line() +
+  lims(y=c(0,K))
+
+
+
+
+# Red Tide X
+shock_X <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
+                              which="X", shock=1 + (-16.5/100))
+  
+ggplot(data=shock_X,
+        mapping= aes(x=time, y=X_t))+
+    geom_line() +
+    lims(y=c(0,K))
+
+# Shock p (River Discharge)
+shock_p <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
+                                   which="p", shock=1 + (-17.6/100))
+
+ggplot(data=shock_p,
+       mapping= aes(x=time, y=X_t))+
+  geom_line() +
+  lims(y=c(0,K))
+
+
   # EXPORT #######################################################################
   
   
