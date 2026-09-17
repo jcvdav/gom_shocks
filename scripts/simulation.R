@@ -113,67 +113,99 @@ plot_grid(p_X, p_H, ncol = 1)
 shock_q <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
                     which="q", shock=1 + (-20/100))
 
-ggplot(data=shock_q, 
+
+p_X <- ggplot(data=shock_q, 
        mapping= aes(x=time, y=X_t))+
-  geom_line() + lims(y=c(0,K))
+  geom_line() 
+
+p_H <- ggplot(data=shock_q, 
+              mapping= aes(x=time, y=H_t))+
+  geom_line() 
+
+plot_grid(p_X, p_H, ncol = 1)
 
 ## Shock p (Red Tide)
 shock_p <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
                   which="p", shock=1 + (-25/100))
 
-ggplot(data=shock_p, 
+p_X <- ggplot(data=shock_p, 
        mapping= aes(x=time, y=X_t))+
-  geom_line() + 
-  lims(y=c(0,K))
+  geom_line() 
+p_H <- ggplot(data=shock_p, 
+              mapping= aes(x=time, y=H_t))+
+  geom_line() 
+
+plot_grid(p_X, p_H, ncol=1)
 
 ##Shock c (Hypoxia) 
 shock_c <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
                     which="c", shock=1 + (11.1/100))
 
-ggplot(data=shock_c, 
+p_X <- ggplot(data=shock_c, 
        mapping= aes(x=time, y=X_t))+
-  geom_line() + 
-  lims(y=c(0,K))
+  geom_line() 
+
+p_H <- ggplot(data=shock_c, 
+              mapping= aes(x=time, y=H_t))+
+  geom_line() 
+
+plot_grid(p_X, p_H, ncol=1)
 
 ## Shock r (Red Tide)
 shock_r <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
                     which="r", shock=1 + (31.5/100))
 
-ggplot(data=shock_r, 
+p_X <- ggplot(data=shock_r, 
        mapping= aes(x=time, y=X_t))+
-  geom_line() + 
-  lims(y=c(0,K))
+  geom_line() 
+
+p_H <- ggplot(data=shock_r, 
+              mapping= aes(x=time, y=H_t))+
+  geom_line() 
+
+plot_grid(p_X, p_H, ncol=1)
 
 ##Shock r (Hypoxia)
 shock_r <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
                             which="r", shock=1 + (28.6/100))
 
-ggplot(data=shock_r,
+p_X <- ggplot(data=shock_r,
        mapping= aes(x=time, y=X_t))+
-  geom_line() +
-  lims(y=c(0,K))
+  geom_line() 
 
+p_H <- ggplot(data=shock_r,
+              mapping= aes(x=time, y=H_t))+
+  geom_line() 
 
-
+plot_grid(p_X, p_H, ncol=1)
 
 # Red Tide X
 shock_X <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
                               which="X", shock=1 + (-16.5/100))
   
-ggplot(data=shock_X,
+p_X <- ggplot(data=shock_X,
         mapping= aes(x=time, y=X_t))+
-    geom_line() +
-    lims(y=c(0,K))
+    geom_line() 
+
+p_H <- ggplot(data=shock_X,
+              mapping= aes(x=time, y=H_t))+
+  geom_line() 
+
+plot_grid(p_X, p_H, ncol=1)
 
 # Shock p (River Discharge)
 shock_p <- simulate(p=p, q=q, beta=beta, c=c, X=data1$X[100], r=r, K=K, shock_t=10,
                                    which="p", shock=1 + (-17.6/100))
 
-ggplot(data=shock_p,
+p_X <- ggplot(data=shock_p,
        mapping= aes(x=time, y=X_t))+
-  geom_line() +
-  lims(y=c(0,K))
+  geom_line() 
 
+p_H <- ggplot(data=shock_p,
+              mapping= aes(x=time, y=H_t))+
+  geom_line() 
+
+plot_grid(p_X, p_H, ncol=1)
 
   # EXPORT #######################################################################
   
